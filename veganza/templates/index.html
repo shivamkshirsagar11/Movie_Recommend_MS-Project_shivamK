@@ -2,17 +2,235 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<meta name="Description" content="Enter your description here"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<link rel="stylesheet" href="assets/css/style.css">
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<style>
+    @import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,700,800");
+    * {
+      box-sizing: border-box;
+      margin: 0; }
+    
+    html, body {
+      margin: 0;
+      background: black;
+      font-family: 'Montserrat', helvetica, arial, sans-serif;
+      font-size: 14px;
+      font-weight: 400; }
+    
+    .movie_card {
+      position: relative;
+      display: block;
+      width: 800px;
+      height: 350px;
+      margin: 100px auto;
+      overflow: hidden;
+      border-radius: 10px;
+      transition: all 0.4s; }
+      .movie_card:hover {
+        transform: scale(1.02);
+        transition: all 0.4s; }
+      .movie_card .info_section {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background-blend-mode: multiply;
+        z-index: 2;
+        border-radius: 10px; }
+        .movie_card .info_section .movie_header {
+          position: relative;
+          padding: 25px;
+          height: 40%; }
+          .movie_card .info_section .movie_header h1 {
+            color: #fff;
+            font-weight: 400; }
+          .movie_card .info_section .movie_header h4 {
+            color: #9ac7fa;
+            font-weight: 400; }
+          .movie_card .info_section .movie_header .minutes {
+            display: inline-block;
+            margin-top: 10px;
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.13); }
+          .movie_card .info_section .movie_header .type {
+            display: inline-block;
+            color: #cee4fd;
+            margin-left: 10px; }
+          .movie_card .info_section .movie_header .locandina {
+            position: relative;
+            float: left;
+            margin-right: 20px;
+            height: 120px;
+            box-shadow: 0 0 20px -10px rgba(0, 0, 0, 0.5); }
+        .movie_card .info_section .movie_desc {
+          padding: 25px;
+          height: 50%; }
+          .movie_card .info_section .movie_desc .text {
+            color: #cfd6e1; }
+        .movie_card .info_section .movie_social {
+          height: 10%;
+          padding-left: 15px;
+          padding-bottom: 20px; }
+          .movie_card .info_section .movie_social ul {
+            list-style: none;
+            padding: 0; }
+            .movie_card .info_section .movie_social ul li {
+              display: inline-block;
+              color: rgba(255, 255, 255, 0.4);
+              transition: color 0.3s;
+              transition-delay: 0.15s;
+              margin: 0 10px; }
+              .movie_card .info_section .movie_social ul li:hover {
+                transition: color 0.3s;
+                color: rgba(255, 255, 255, 0.8); }
+              .movie_card .info_section .movie_social ul li i {
+                font-size: 19px;
+                cursor: pointer; }
+      .movie_card .blur_back {
+        position: absolute;
+        top: 0;
+        z-index: 1;
+        height: 100%;
+        right: 0;
+        background-size: cover;
+        border-radius: 11px; }
+    
+    @media screen and (min-width: 768px) {
+      .movie_header {
+        width: 60%; }
+    
+      .movie_desc {
+        width: 50%; }
+    
+      .info_section {
+        background: linear-gradient(to right, #0d0d0c 50%, transparent 100%); }
+    
+      .blur_back {
+        width: 80%;
+        background-position: -100% 10% !important; } }
+    @media screen and (max-width: 768px) {
+      .movie_card {
+        width: 95%;
+        margin: 70px auto;
+        min-height: 350px;
+        height: auto; }
+    
+      .blur_back {
+        width: 100%;
+        background-position: 50% 50% !important; }
+    
+      .movie_header {
+        width: 100%;
+        margin-top: 85px; }
+    
+      .movie_desc {
+        width: 100%; }
+    
+      .info_section {
+        background: linear-gradient(to top, #141413 50%, transparent 100%);
+        display: inline-grid; } }
+    #bright {
+      box-shadow: 0px 0px 150px -45px rgba(255, 51, 0, 0.5); }
+      #bright:hover {
+        box-shadow: 0px 0px 120px -55px rgba(255, 51, 0, 0.5); }
+    
+    .bright_back {
+      background: url("https://image.shutterstock.com/image-vector/realistic-cinema-advertising-poster-popcorn-260nw-1411840919.jpg"); }
+    
+    #tomb {
+      box-shadow: 0px 0px 150px -45px rgba(19, 160, 134, 0.6); }
+      #tomb:hover {
+        box-shadow: 0px 0px 120px -55px rgba(19, 160, 134, 0.6); }
+    
+    .tomb_back {
+      background: url("https://fsmedia.imgix.net/cd/c9/5e/ba/4817/4d9a/93f0/c776ec32ecbc/lara-crofts-neck-looks-unnatural-in-the-new-poster-for-tomb-raider.png"); }
+    
+    #ave {
+      box-shadow: 0px 0px 150px -45px rgba(199, 147, 75, 0.7);
+      margin-bottom: 200px; }
+      #ave:hover {
+        box-shadow: 0px 0px 120px -55px rgba(199, 147, 75, 0.7); }
+    
+    .ave_back {
+      background: url("https://www.gannett-cdn.com/-mm-/c03fd140debe8ad4c05cf81a5cad7ad61a12ce52/c=0-1580-2985-3266&r=x803&c=1600x800/local/-/media/2017/06/09/USATODAY/USATODAY/636326272873599176-Black-Panther-Teaser.jpg"); }
+
+    ::-webkit-scrollbar {
+        display: none;
+    }    
+</style>
 <title>Veganza Index</title>
 </head>
 <body>
-<h1>Welcome to Veganza</h1>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/js/bootstrap.min.js"></script>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Veganza</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Recomdations <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Favourites</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Other
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#"><span style="color:green;">Liked</span></a>
+                <a class="dropdown-item" href="#"><span style="color:orange;">Disliked<span></a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#"><span style="color:red;">Reset</span></a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#">Disabled</a>
+            </li>
+          </ul>
+          <input type="text" placeholder="Search.." name="search" style="margin-left:30px;" id="search"><input type="button" onclick="search(document.getElementById('search').value)" value="go" class="btn btn-success">
+				</div>
+        </div>
+      </nav>
+{% comment %} Movie card starts..................... {% endcomment %}
+{% for movie in movies%}
+    <div class="movie_card">
+        <div class="info_section">
+          <div class="movie_header">
+            <img class="locandina" src="/media/{{movie.poster}}"/>
+            <h1>{{movie.name}}</h1>
+            <h4>{{movie.year}}, {{movie.director}}</h4>
+            <span class="minutes">{{movie.runtimes}}</span>
+            <p class="type">Category: {{movie.category}}</p>
+            <p class="type">Synopsis: {{movie.synopsis}}</p>
+          </div>
+          <div class="movie_social">
+            {% comment %} <ul>
+              <li><i class="material-icons">share</i></li>
+              <li><i class="material-icons"></i></li>
+              <li><i class="material-icons">chat_bubble</i></li>
+            </ul> {% endcomment %}
+          </div>
+        </div>
+        <div class="blur_back bright_back"></div>
+      </div>
+    {%endfor%}
+{% comment %} Movie card ends........ {% endcomment %}
+
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+      <script>
+        function search(string){
+            window.find(string);
+            }
+        </script>
 </body>
 </html>
