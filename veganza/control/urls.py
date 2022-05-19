@@ -3,4 +3,5 @@ from django.urls import path
 
 urlpatterns = [
     path('', views.index,name='Lost_Home'),
+    path('addto', views.addto,name='addto'),
 ]

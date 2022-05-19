@@ -15,6 +15,27 @@ class Movies(models.Model):
     category = models.TextField(max_length=1028,default=None)
     synopsis = models.TextField(max_length=11028,default=None)
     poster = models.ImageField(upload_to="movie_poster",default="movie_poster/default.jpg")
+    watch = models.BooleanField(default=False)
+    like = models.BooleanField(default=False)
+    dislike = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
+
+class Favorite(models.Model):
+    name = models.CharField(max_length=255,default=None)
+    mid = models.IntegerField(default=None)
+
+    def __str__(self): return self.name
+
+class Like(models.Model):
+    name = models.CharField(max_length=255,default=None)
+    mid = models.IntegerField(default=None)
+
+    def __str__(self): return self.name
+
+class Dislike(models.Model):
+    name = models.CharField(max_length=255,default=None)
+    mid = models.IntegerField(default=None)
+
+    def __str__(self): return self.name
