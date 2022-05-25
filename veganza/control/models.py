@@ -14,10 +14,13 @@ class Movies(models.Model):
     actors = models.TextField(max_length=1028,default=None)
     category = models.TextField(max_length=1028,default=None)
     synopsis = models.TextField(max_length=11028,default=None)
-    poster = models.ImageField(upload_to="movie_poster",default="movie_poster/default.jpg")
+    poster = models.ImageField(upload_to="movie_poster",default="movie_poster/default.jpg",null=True,blank=True)
     watch = models.BooleanField(default=False)
     like = models.BooleanField(default=False)
     dislike = models.BooleanField(default=False)
+    backposter = models.URLField(default='N/A',null=True,blank=True)
+    wikilink = models.URLField(default='N/A',null=True,blank=True)
+    rating = models.CharField(default=0,max_length=15)
 
     def __str__(self):
         return self.name

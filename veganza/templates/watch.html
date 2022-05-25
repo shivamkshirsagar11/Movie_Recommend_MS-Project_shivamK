@@ -236,7 +236,12 @@
                 <path d="M11 11.5a.5.5 0 0 1 .5-.5h4a.5.5 0 1 1 0 1h-4a.5.5 0 0 1-.5-.5z"/>
               </svg></a>
             {%endif %}
-            
+            <form action="/movie">
+              <input type="hidden" name="movie_id" value="{{movie.id}}">
+            <button type="submit" style="display:inline-block;">
+              open
+            </button>
+          </form>
             </p>
             <img class="locandina" src="/media/{{movie.poster}}"/>
             <h1>{{movie.name}}</h1>

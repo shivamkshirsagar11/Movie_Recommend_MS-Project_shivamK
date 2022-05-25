@@ -8,4 +8,5 @@ urlpatterns = [
     path('dislike', views.dislike,name='dislike'),
     path('watch', views.watch,name='watch'),
     path('reset', views.reset,name='reset'),
+    path('movie', views.movie,name='movie'),
 ]

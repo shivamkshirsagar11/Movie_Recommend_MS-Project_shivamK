@@ -96,3 +96,9 @@ def reset(request):
     likeobj.delete()
     dislikeobj.delete()
     return redirect('/')
+
+def movie(request):
+    if request.method == 'GET':
+        id = request.GET['movie_id']
+        movie_particularly = m.objects.get(id=id)
+        return render(request, 'movie.html',{"obj":movie_particularly})
