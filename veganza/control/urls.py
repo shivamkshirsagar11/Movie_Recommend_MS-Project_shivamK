@@ -9,4 +9,6 @@ urlpatterns = [
     path('watch', views.watch,name='watch'),
     path('reset', views.reset,name='reset'),
     path('movie', views.movie,name='movie'),
+    path('recommend', views.recommend,name='recommend'),
+    path('process-movie', views.process,name='process-movie'),
 ]

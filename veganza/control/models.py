@@ -42,3 +42,7 @@ class Dislike(models.Model):
     mid = models.IntegerField(default=None)
 
     def __str__(self): return self.name
+class Recommend(models.Model):
+    mid = models.IntegerField(default=None)
+
+    def __str__(self): return 'Movie Id: '+str(self.mid)

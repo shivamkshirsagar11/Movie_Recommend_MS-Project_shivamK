@@ -276,7 +276,26 @@ a[data-tooltip][data-placement="top"]::after {
          
         </div> <!-- end container -->
       </div> <!-- end movie-card -->
+      <script src="https://code.jquery.com/jquery-3.1.1.min.js">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/js/bootstrap.min.js"></script>
+<script>
+  setTimeout(function(){
+    $.ajax({ // create an AJAX call...
+      type: 'POST', // GET or POST
+      url: '/process-movie', // the file to call
+      data: {
+        mid: {{obj.id}},
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+    },
+        success: function(data) { // on success..
+          //location.reload();
+        },
+        error: function(e, x, r) { // on error..
+             // update the DIV
+        }
+    });
+  },6000)
+</script>
 </body>
 </html>
