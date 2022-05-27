@@ -149,6 +149,9 @@ def process_movie_recommendations(categories,actors):
     movie_rec_list_1_1 = []
     movie_rec_list_1_2 = []
     movie_rec_list_1_3 = []
+    movie_rec_list_1_4 = []
+    movie_rec_list_1_5 = []
+    movie_rec_list_1_6 = []
     movie_rec_list_2 = []
     #------------------------------------------------------------------------------------------
     for i in categories:
@@ -156,16 +159,42 @@ def process_movie_recommendations(categories,actors):
         for temp2 in temp:
             if temp2.id not in movie_rec_list_1: movie_rec_list_1.append(temp2.id)
     #------------------------------------------------------------------------------------------
-    temp_1 = m.objects.filter(Q(category__icontains =categories[0]) & Q(category__icontains = categories[1]))
+    #combination of 2-2 categories
+    temp_1 = m.objects.filter(Q(category__icontains =categories[0]) & Q(category__icontains = categories[1])) 
     temp_2 = m.objects.filter(Q(category__icontains =categories[1]) & Q(category__icontains = categories[2]))
     temp_3 = m.objects.filter(Q(category__icontains =categories[2]) & Q(category__icontains = categories[0]))
-    print(temp_1,temp_2,temp_3)
+    #combination of 1-1 category
+    temp_1_beta = m.objects.filter(Q(category__icontains =categories[0]))
+    temp_2_beta = m.objects.filter(Q(category__icontains =categories[1]))
+    temp_3_beta = m.objects.filter(Q(category__icontains =categories[2]))
+
+    # print(temp_1,temp_2,temp_3)
+    # print(temp_1_beta,temp_2_beta,temp_3_beta)
     for i in temp_1:
         movie_rec_list_1_1.append(i.id)
     for i in temp_2:
         movie_rec_list_1_2.append(i.id)
     for i in temp_3:
         movie_rec_list_1_3.append(i.id)
+
+    for i in temp_1_beta:
+        check = i.category.split(', ')
+        count = 0
+        if (check[0] in categories and check[1] in categories) or (check[0] in categories and check[2] in categories) or (check[1] in categories and check[2] in categories): count = count + 1
+        if count > 0:
+            movie_rec_list_1_4.append(i.id)
+    for i in temp_2_beta:
+        check = i.category.split(', ')
+        count = 0
+        if (check[0] in categories and check[1] in categories) or (check[0] in categories and check[2] in categories) or (check[1] in categories and check[2] in categories): count = count + 1
+        if count > 0:
+            movie_rec_list_1_5.append(i.id)
+    for i in temp_3_beta:
+        check = i.category.split(', ')
+        count = 0
+        if (check[0] in categories and check[1] in categories) or (check[0] in categories and check[2] in categories) or (check[1] in categories and check[2] in categories): count = count + 1
+        if count > 0:
+            movie_rec_list_1_6.append(i.id)
     #------------------------------------------------------------------------------------------
     for index,actor in enumerate(actors):
         temp = m.objects.filter(actors__icontains = actor)
@@ -174,6 +203,12 @@ def process_movie_recommendations(categories,actors):
     #------------------------------------------------------------------------------------------
 
     movie_recommend_final_common = common(movie_rec_list_2,movie_rec_list_1)
+    print(movie_rec_list_1)
+    print(movie_rec_list_2)
+    print(movie_rec_list_1_1)
+    print(movie_rec_list_1_2)
+    print(movie_rec_list_1_3)
+    print(movie_recommend_final_common)
     add_to_database_recommend(movie_recommend_final_common)
     temp_4 = []
     for i in movie_rec_list_1_1:
@@ -185,12 +220,26 @@ def process_movie_recommendations(categories,actors):
     for i in movie_rec_list_1_3:
         if (i not in temp_4) and (i not in movie_recommend_final_common):
             temp_4.append(i)
-    print(temp_4)
+    # print(temp_4)
     add_to_database_recommend(temp_4)
-            
+
+    one_to_one = []
+    for i in movie_rec_list_1_4:
+        if ((i not in movie_rec_list_1_5) or (i not in movie_rec_list_1_6)) and (i not in movie_recommend_final_common) and (i not in temp_4): one_to_one.append(i)
+    for i in movie_rec_list_1_5:
+        if ((i not in movie_rec_list_1_4) or (i not in movie_rec_list_1_6)) and (i not in movie_recommend_final_common) and (i not in one_to_one) and (i not in temp_4): one_to_one.append(i)
+    for i in movie_rec_list_1_6:
+        if ((i not in movie_rec_list_1_5) or (i not in movie_rec_list_1_4)) and (i not in movie_recommend_final_common) and (i not in one_to_one) and (i not in temp_4): one_to_one.append(i)
+    add_to_database_recommend(one_to_one)
+    print(movie_rec_list_1_4)
+    print(movie_rec_list_1_5)
+    print(movie_rec_list_1_6)
+    print(one_to_one)
+
     movie_rec_list_1.clear()
     movie_rec_list_1_1.clear()
     movie_rec_list_1_2.clear()
     movie_rec_list_1_3.clear()
     movie_rec_list_2.clear()
     movie_recommend_final_common.clear()
+    print("Movies Processed and added to recommendations")
