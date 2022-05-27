@@ -200,7 +200,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="/recommend">Recomdations <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="/recommend">Recommendations <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/watch">My List</a>
@@ -217,7 +217,7 @@
               </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link disabled" href="#">Disabled</a>
+              <a class="nav-link disabled">Logout</a>
             </li>
           </ul>
           <input type="text" placeholder="Search.." name="search" style="margin-left:30px;" id="search"><input type="button" onclick="search(document.getElementById('search').value)" value="go" class="btn btn-success">
@@ -239,7 +239,7 @@
             <form action="/movie">
               <input type="hidden" name="movie_id" value="{{movie.id}}">
             <button type="submit" style="display:inline-block;">
-              open
+              Watch
             </button>
           </form>
             </p>
