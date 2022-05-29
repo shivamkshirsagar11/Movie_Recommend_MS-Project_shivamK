@@ -1,5 +1,5 @@
 # Movie Recommendation Algorithem Webapp by Shivam Kshirsagar
-<li>Clone repo with <a href='git@github.com:shivamkshirsagar11/Movie_Recommend_MS-Project_shivamK.git'>Link</a></li>
+<li>Clone repo with <b>git@github.com:shivamkshirsagar11/Movie_Recommend_MS-Project_shivamK.git</b> Link</li>
 <li>open <b>Movie_Recommend_MS-Project_shivamK/veganza/veganza</b> folder</li>
 <li>open <b>cmd in this path</b></li>
 <li>type <b>python manage.py runserver</b> for opening the web-application</li>
