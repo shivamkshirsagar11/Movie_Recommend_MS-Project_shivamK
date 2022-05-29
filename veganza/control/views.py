@@ -1,6 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
-from control.models import Movies as m,Like,Dislike,Favorite,Recommend
+from control.models import Movies as m,Like,Dislike,Favorite,Recommend,info
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 
@@ -12,9 +12,14 @@ def addto(request):
     if request.method == 'POST':
         type = request.POST['type']
         movie = request.POST['mid']
-        print(type,movie)
+        # print(type,movie)
         if type == 'like':
             obj = m.objects.get(id = movie)
+            process_movie_recommendations(obj.category,obj.actors,obj.director,obj.studio)
+            old_obj_removing = info.objects.all()
+            old_obj_removing.delete()
+            new_obj_add = info(what_action_performed = "Because You Liked "+obj.name+" !")
+            new_obj_add.save()
             like = Like(name = obj.name,mid = obj.id)
             obj.like = True
             if obj.dislike:
@@ -25,6 +30,8 @@ def addto(request):
             like.save()
         elif type == 'dislike':
             obj = m.objects.get(id = movie)
+            rec = Recommend.objects.get(mid = obj.id)
+            rec.delete()
             dislike = Dislike(name = obj.name,mid = obj.id)
             obj.dislike = True
             if obj.like:
@@ -35,12 +42,22 @@ def addto(request):
             dislike.save()
         elif type == 'watch':
             obj = m.objects.get(id = movie)
+            process_movie_recommendations(obj.category,obj.actors,obj.director,obj.studio)
+            old_obj_removing = info.objects.all()
+            old_obj_removing.delete()
+            new_obj_add = info(what_action_performed = "Because You Added "+obj.name+" To your Watch-List !")
+            new_obj_add.save()
             fav = Favorite(name = obj.name,mid = obj.id)
             obj.watch = True
             obj.save()
             fav.save()
         elif type == 'dislike->like':
             obj = m.objects.get(id = movie)
+            process_movie_recommendations(obj.category,obj.actors,obj.director,obj.studio)
+            old_obj_removing = info.objects.all()
+            old_obj_removing.delete()
+            new_obj_add = info(what_action_performed = "Because You Liked "+obj.name+" !")
+            new_obj_add.save()
             d_l = Dislike.objects.get(mid = obj.id)
             obj.like = True
             obj.dislike = False
@@ -50,6 +67,8 @@ def addto(request):
             d_l.delete()
         elif type == 'like->dislike':
             obj = m.objects.get(id = movie)
+            rec = Recommend.objects.get(mid = obj.id)
+            rec.delete()
             d_l = Dislike.objects.get(mid = obj.id)
             obj.like = False
             obj.dislike = True
@@ -63,6 +82,9 @@ def addto(request):
             obj.watch = False
             obj.save()
             w_r.delete()
+        elif type == 'recommend->remove':
+            OBJ = Recommend.objects.get(mid = movie)
+            OBJ.delete()
         return HttpResponse("done")
 def like(request):
     objs = Like.objects.all()
@@ -89,6 +111,7 @@ def reset(request):
     dislikeobj = Dislike.objects.all()
     recommendobj = Recommend.objects.all()
     mobj = m.objects.all()
+    infos = info.objects.all()
     for movie in mobj:
         movie.like = False
         movie.dislike = False
@@ -98,6 +121,7 @@ def reset(request):
     likeobj.delete()
     dislikeobj.delete()
     recommendobj.delete()
+    infos.delete()
     return redirect('/')
 
 def movie(request):
@@ -108,20 +132,31 @@ def movie(request):
 
 def recommend(request):
     objs = Recommend.objects.all()
+    infoObj = info.objects.all()
+    second = ""
+    for i in infoObj:second = i.what_action_performed
     movies = []
     for i in objs:
         movies.append(m.objects.get(id = i.mid))
     reverse_movie = []
     for i in range(len(movies)):
         reverse_movie.append(movies[(len(movies)-1)-i])
-    return render(request, 'recommend.html',{'movies':reverse_movie})
+    return render(request, 'recommend.html',{'movies':reverse_movie,"info":second})
 @csrf_exempt
 def process(request):
     if request.method == 'POST':
         movie_id = request.POST['mid']
         mobj = m.objects.get(id=movie_id)
+        old_obj_removing = info.objects.all()
+        old_obj_removing.delete()
+        new_obj_add = info(what_action_performed = "Because You Watched "+mobj.name+" !")
+        new_obj_add.save()
         process_movie_recommendations(mobj.category,mobj.actors,mobj.director,mobj.studio)
         return HttpResponse('okay')
+
+def clean_up():
+    objs = Recommend.objects.all()
+    if len(objs) >= 15:objs.delete()
 
 def common(list1,list2):
     temp = []
@@ -159,6 +194,7 @@ def add_to_database_recommend(recommend_movie_ids):
         print("Something went wrong! please reset from browser and try again :-(")
 
 def process_movie_recommendations(categories,actors,director,studio):
+    clean_up()
     categories = categories.split(', ')
     actors = actors.split(', \r\n')
     studio = studio.split(', ')
@@ -194,7 +230,7 @@ def process_movie_recommendations(categories,actors,director,studio):
                 if k in actors:
                     # print(k)
                     switch = switch + 1
-            if switch > 1 and j.id not in movie_rec_list_4:
+            if switch >= 1 and j.id not in movie_rec_list_4:
                 if (j_cate[0] in categories) or (j_cate[1] in categories) or (j_cate[2] in categories):
                     movie_rec_list_4.append(j.id)
             # print(switch,movie_rec_list_4)

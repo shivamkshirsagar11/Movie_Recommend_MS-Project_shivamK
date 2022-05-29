@@ -47,3 +47,7 @@ class Recommend(models.Model):
     mid = models.IntegerField(default=None,unique=True)
 
     def __str__(self): return 'Movie Id: '+str(self.mid)
+
+class info(models.Model):
+    what_action_performed = models.TextField(default=None,max_length=255)
+    def __str__(self): return self.what_action_performed
