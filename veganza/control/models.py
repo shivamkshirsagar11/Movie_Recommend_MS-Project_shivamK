@@ -21,6 +21,7 @@ class Movies(models.Model):
     backposter = models.URLField(default='N/A',null=True,blank=True)
     wikilink = models.URLField(default='N/A',null=True,blank=True)
     rating = models.CharField(default=0,max_length=15)
+    studio = models.TextField(max_length=255,default="not set")
 
     def __str__(self):
         return self.name
@@ -43,6 +44,6 @@ class Dislike(models.Model):
 
     def __str__(self): return self.name
 class Recommend(models.Model):
-    mid = models.IntegerField(default=None)
+    mid = models.IntegerField(default=None,unique=True)
 
     def __str__(self): return 'Movie Id: '+str(self.mid)

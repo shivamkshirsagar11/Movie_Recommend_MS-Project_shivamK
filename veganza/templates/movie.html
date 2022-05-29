@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <meta name="Description" content="Enter your description here"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <style>
     @import url(https://fonts.googleapis.com/css?family=Lato:400,300,700);
 @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
@@ -32,7 +31,7 @@ a:hover {
   margin: 0 auto;
   width: 780px;
   height: 640px;
-  background: #F0F0ED;
+  background: black;
   border-radius: 5px;
   position: relative; }
 
@@ -242,6 +241,39 @@ a[data-tooltip][data-placement="top"]::after {
 <title>{{obj.name}}</title>
 </head>
 <body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Veganza</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/recommend">Recommendations <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/watch">My List</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Other
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/like"><span style="color:green;">Liked</span></a>
+            <a class="dropdown-item" href="/dislike"><span style="color:orange;">Disliked<span></a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/reset"><span style="color:red;">Reset</span></a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled">Logout</a>
+        </li>
+      </ul>
+      <input type="text" placeholder="Search.." name="search" style="margin-left:30px;" id="search"><input type="button" onclick="search(document.getElementById('search').value)" value="go" class="btn btn-success">
+    </div>
+    </div>
+  </nav>
     <div class="movie-card">
   
         <div class="container">
@@ -268,8 +300,8 @@ a[data-tooltip][data-placement="top"]::after {
               
             </div> <!-- end column1 -->
             <div class="column2">
-              <span class="tag">{{obj.category}}</span>
-              <p class="det"><u><b>Synopsis</b></u>:<br>{{obj.synopsis}} <a href="{{obj.wikilink}}">read more</a></p>
+              <span class="tag">Category: {{obj.category}}</span>
+              <p class="det"><u>Presented by:</u> {{obj.studio}}<br><u>Actors:</u> {{obj.actors}}<br><u><b>Synopsis</b></u>:<br>{{obj.synopsis}} <a href="{{obj.wikilink}}">read more</a></p>
             </div> <!-- end column2 -->
           </div> <!-- end description -->
           
@@ -277,8 +309,8 @@ a[data-tooltip][data-placement="top"]::after {
         </div> <!-- end container -->
       </div> <!-- end movie-card -->
       <script src="https://code.jquery.com/jquery-3.1.1.min.js">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script>
   setTimeout(function(){
     $.ajax({ // create an AJAX call...

@@ -111,13 +111,16 @@ def recommend(request):
     movies = []
     for i in objs:
         movies.append(m.objects.get(id = i.mid))
-    return render(request, 'recommend.html',{'movies':movies})
+    reverse_movie = []
+    for i in range(len(movies)):
+        reverse_movie.append(movies[(len(movies)-1)-i])
+    return render(request, 'recommend.html',{'movies':reverse_movie})
 @csrf_exempt
 def process(request):
     if request.method == 'POST':
         movie_id = request.POST['mid']
         mobj = m.objects.get(id=movie_id)
-        process_movie_recommendations(mobj.category,mobj.actors)
+        process_movie_recommendations(mobj.category,mobj.actors,mobj.director,mobj.studio)
         return HttpResponse('okay')
 
 def common(list1,list2):
@@ -137,13 +140,28 @@ def not_common(list1,list2):
     return temp
 
 def add_to_database_recommend(recommend_movie_ids):
-    for i in recommend_movie_ids:
-        temp = Recommend(mid = i)
-        temp.save()
+    try:
+        all_recommendations = []
+        objs = Recommend.objects.all()
+        objs_alpha = []
+        for i in objs:objs_alpha.append(i.mid)
+        for i in recommend_movie_ids:
+            # print(i.id)
+            if i not in objs_alpha: 
+                all_recommendations.append(i)
+        # print("at last sorted: ",all_recommendations)
+        # print("passed objects parameter: ",recommend_movie_ids)
+        # print("all recommend objects: ",objs_alpha)
+        for i in all_recommendations:
+            temp = Recommend(mid = i)
+            temp.save()
+    except:
+        print("Something went wrong! please reset from browser and try again :-(")
 
-def process_movie_recommendations(categories,actors):
+def process_movie_recommendations(categories,actors,director,studio):
     categories = categories.split(', ')
     actors = actors.split(', \r\n')
+    studio = studio.split(', ')
     # print (categories, actors)
     movie_rec_list_1 = []
     movie_rec_list_1_1 = []
@@ -153,6 +171,31 @@ def process_movie_recommendations(categories,actors):
     movie_rec_list_1_5 = []
     movie_rec_list_1_6 = []
     movie_rec_list_2 = []
+    movie_rec_list_3 = []
+    movie_rec_list_4 = []
+    #------------------------------------------------------------------------------------------
+    d_ir = m.objects.filter(director__icontains=director)
+    for i in d_ir:
+        movie_rec_list_3.append(i.id)
+    add_to_database_recommend(movie_rec_list_3)
+    #------------------------------------------------------------------------------------------
+    for i in studio:
+        stu = m.objects.filter(studio__icontains=i)
+        switch = 0
+        print(stu)
+        for j in stu:
+            j_act = j.actors
+            j_act = j_act.split(', \r\n')
+            j_cate = j.category
+            j_cate  = j_cate.split(", ")
+            # print(j_act)
+            for k in j_act:
+                if k in actors:
+                    switch = switch + 1
+            if switch > 0 and j.id not in movie_rec_list_4:
+                if (j_cate[0] in categories) or (j_cate[1] in categories) or (j_cate[2] in categories):
+                    movie_rec_list_4.append(j.id)
+            # print(switch,movie_rec_list_4)
     #------------------------------------------------------------------------------------------
     for i in categories:
         temp = m.objects.filter(category__icontains = i)
@@ -203,12 +246,12 @@ def process_movie_recommendations(categories,actors):
     #------------------------------------------------------------------------------------------
 
     movie_recommend_final_common = common(movie_rec_list_2,movie_rec_list_1)
-    print(movie_rec_list_1)
-    print(movie_rec_list_2)
-    print(movie_rec_list_1_1)
-    print(movie_rec_list_1_2)
-    print(movie_rec_list_1_3)
-    print(movie_recommend_final_common)
+    # print(movie_rec_list_1)
+    # print(movie_rec_list_2)
+    # print(movie_rec_list_1_1)
+    # print(movie_rec_list_1_2)
+    # print(movie_rec_list_1_3)
+    # print(movie_recommend_final_common)
     add_to_database_recommend(movie_recommend_final_common)
     temp_4 = []
     for i in movie_rec_list_1_1:
@@ -231,15 +274,21 @@ def process_movie_recommendations(categories,actors):
     for i in movie_rec_list_1_6:
         if ((i not in movie_rec_list_1_5) or (i not in movie_rec_list_1_4)) and (i not in movie_recommend_final_common) and (i not in one_to_one) and (i not in temp_4): one_to_one.append(i)
     add_to_database_recommend(one_to_one)
-    print(movie_rec_list_1_4)
-    print(movie_rec_list_1_5)
-    print(movie_rec_list_1_6)
-    print(one_to_one)
+    add_to_database_recommend(movie_rec_list_4)
+    # print(movie_rec_list_1_4)
+    # print(movie_rec_list_1_5)
+    # print(movie_rec_list_1_6)
+    # print(one_to_one)
 
     movie_rec_list_1.clear()
     movie_rec_list_1_1.clear()
     movie_rec_list_1_2.clear()
     movie_rec_list_1_3.clear()
+    movie_rec_list_1_4.clear()
+    movie_rec_list_1_5.clear()
+    movie_rec_list_1_6.clear()
     movie_rec_list_2.clear()
+    movie_rec_list_3.clear()
+    movie_rec_list_4.clear()
     movie_recommend_final_common.clear()
     print("Movies Processed and added to recommendations")
