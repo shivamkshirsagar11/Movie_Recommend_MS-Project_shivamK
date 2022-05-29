@@ -30,8 +30,9 @@ def addto(request):
             like.save()
         elif type == 'dislike':
             obj = m.objects.get(id = movie)
-            rec = Recommend.objects.get(mid = obj.id)
-            rec.delete()
+            rec = Recommend.objects.filter(mid = obj.id)
+            rec = rec.first()
+            if rec != None :rec.delete()
             dislike = Dislike(name = obj.name,mid = obj.id)
             obj.dislike = True
             if obj.like:
