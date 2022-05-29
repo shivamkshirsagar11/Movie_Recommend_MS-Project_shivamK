@@ -182,7 +182,7 @@ def process_movie_recommendations(categories,actors,director,studio):
     for i in studio:
         stu = m.objects.filter(studio__icontains=i)
         switch = 0
-        print(stu)
+        # print(stu,i)
         for j in stu:
             j_act = j.actors
             j_act = j_act.split(', \r\n')
@@ -190,9 +190,11 @@ def process_movie_recommendations(categories,actors,director,studio):
             j_cate  = j_cate.split(", ")
             # print(j_act)
             for k in j_act:
+                # print(k)
                 if k in actors:
+                    # print(k)
                     switch = switch + 1
-            if switch > 0 and j.id not in movie_rec_list_4:
+            if switch > 1 and j.id not in movie_rec_list_4:
                 if (j_cate[0] in categories) or (j_cate[1] in categories) or (j_cate[2] in categories):
                     movie_rec_list_4.append(j.id)
             # print(switch,movie_rec_list_4)
